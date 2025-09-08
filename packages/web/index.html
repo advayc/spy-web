@@ -12,30 +12,96 @@
     .wrap{max-width:860px;margin:0 auto}
     h1{margin-top:0}
     .muted{color:#a3a3ad}
-    .demo{width: calc(33.333% - 10px); height: auto; border-radius:8px;border:1px solid #1e1e2a; transition: opacity 0.3s;}
+    .demo{width: 100%; max-width: 320px; height: auto; border-radius:8px;border:1px solid #1e1e2a; transition: opacity 0.3s; display: block; margin: 0 auto; cursor: pointer;}
     .demo:hover { opacity: 0.8; }
-  .site-title{display:flex;align-items:center;gap:12px}
-  h2 { margin-top: 32px; }
-  .section-top { margin-top: 28px; }
-  .footer-note { margin-top: 8px; }
+    .site-title{display:flex;align-items:center;gap:12px}
+    h2 { margin-top: 32px; }
+    .section-top { margin-top: 28px; }
+    .footer-note { margin-top: 8px; }
     .site-title img{width:28px;height:28px}
     .meta-links{margin-top:36px;color:#a3a3ad;font-size:14px}
     .meta-links span{margin:0 8px}
-    .demo-button{padding:8px 16px;background:#141414;border:1px solid #262633;border-radius:8px;color:#f7f7fb;cursor:pointer;margin-bottom:20px}
-  .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
-  .visible-demo { display: block; }
-  .demo-video-wrap { margin-bottom: 16px; }
-  .demo-video { width: 100%; max-height: 520px; object-fit: contain; border-radius:8px; border:1px solid #1e1e2a; }
+    .demo-button{padding:8px 16px;background:#141414;border-radius:8px;color:#f7f7fb;cursor:pointer;margin-bottom:20px;text-decoration:none;display:inline-block;text-align:center;border:1px solid transparent;transition:border-color 0.2s;}
+    .demo-button:hover{border-color:#a3a3ad;}
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
+    .visible-demo { display: block; }
+    .demo-video-wrap { margin-bottom: 16px; }
+    .demo-video { width: 100%; max-height: 520px; object-fit: contain; border-radius:8px; border:1px solid #1e1e2a; }
     section { margin-bottom: 40px; }
+    .lightbox { 
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: zoom-out;
+      transition: opacity 0.2s;
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+      background: #222;
+      cursor: zoom-in;
+      transition: transform 0.2s, box-shadow 0.2s;
+      outline: none;
+      user-select: none;
+    }
+    .lightbox-zoomed {
+      transform: scale(2.2) translateY(-2vw);
+      cursor: grab;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.6);
+    }
+    .lightbox-controls {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      z-index: 10000;
+      display: flex;
+      gap: 12px;
+    }
+    .lightbox-btn {
+      background: rgba(30,30,42,0.85);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .lightbox-btn:hover {
+      background: #007aff;
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" style="display:none;" tabindex="-1">
+      <div class="lightbox-controls">
+        <button class="lightbox-btn" id="zoom-in">Zoom In</button>
+        <button class="lightbox-btn" id="zoom-out">Zoom Out</button>
+        <button class="lightbox-btn" id="close-lightbox">Close</button>
+      </div>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="Demo preview" />
+    </div>
+
     <h1 class="site-title">
       <img src="icon.png" alt="Spy icon" />
       Spy — Party Game
     </h1>
-  <h2>About the Game</h2>
+
+    <h2>About the Game</h2>
     <p>
       Spy is a social deduction party game for iOS, Android, and web. Gather your friends and play two unique modes:
       <ul>
@@ -55,56 +121,69 @@
       <h3 class="muted">Demos</h3>
       <button id="toggle-demos" class="demo-button">Hide Demos</button>
       <div id="demo-container" class="visible-demo">
-      <section class="demo-video-section">
-      <h4>Demo Video</h4>
-      <!-- Demo video (sourced from project assets) -->
-        <div class="demo-video-wrap">
-        <video class="demo demo-video" controls muted loop preload="metadata">
-      <source src="demos/demo.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      </section>
+        <section class="demo-video-section">
+          <h4>Demo Video</h4>
+          <div class="demo-video-wrap">
+            <video class="demo demo-video" controls muted loop preload="metadata">
+              <source src="demos/demo.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </section>
 
-  <h4>iPhone Screenshots</h4>
+        <h4>iPhone Screenshots</h4>
+        <div class="demo-grid">
+          <img class="demo" src="demos/iphone/demo1.png" alt="Demo 1" />
+          <img class="demo" src="demos/iphone/demo2.png" alt="Demo 2" />
+          <img class="demo" src="demos/iphone/demo3.png" alt="Demo 3" />
+          <img class="demo" src="demos/iphone/demo4.png" alt="Demo 4" />
+          <img class="demo" src="demos/iphone/demo5.png" alt="Demo 5" />
+          <img class="demo" src="demos/iphone/demo6.png" alt="Demo 6" />
+          <img class="demo" src="demos/iphone/demo7.png" alt="Demo 7" />
+          <img class="demo" src="demos/iphone/demo8.png" alt="Demo 8" />
+          <img class="demo" src="demos/iphone/demo9.png" alt="Demo 9" />
+        </div>
 
-  <div class="demo-grid">
-        <img class="demo" src="demos/iphone/demo1.png" alt="Demo 1" />
-        <img class="demo" src="demos/iphone/demo2.png" alt="Demo 2" />
-        <img class="demo" src="demos/iphone/demo3.png" alt="Demo 3" />
-        <img class="demo" src="demos/iphone/demo4.png" alt="Demo 4" />
-        <img class="demo" src="demos/iphone/demo5.png" alt="Demo 5" />
-        <img class="demo" src="demos/iphone/demo6.png" alt="Demo 6" />
-        <img class="demo" src="demos/iphone/demo7.png" alt="Demo 7" />
-        <img class="demo" src="demos/iphone/demo8.png" alt="Demo 8" />
-        <img class="demo" src="demos/iphone/demo9.png" alt="Demo 9" />
-  </div>
-  <h4>iPad Screenshots</h4>
-  <div class="demo-grid">
-  <img class="demo" src="demos/ipad/demo1.png" alt="iPad Demo 1" />
-  <img class="demo" src="demos/ipad/demo2.png" alt="iPad Demo 2" />
-  <img class="demo" src="demos/ipad/demo3.png" alt="iPad Demo 3" />
-  <img class="demo" src="demos/ipad/demo4.png" alt="iPad Demo 4" />
-  <img class="demo" src="demos/ipad/demo5.png" alt="iPad Demo 5" />
-  <img class="demo" src="demos/ipad/demo6.png" alt="iPad Demo 6" />
-  <img class="demo" src="demos/ipad/demo7.png" alt="iPad Demo 7" />
-  <img class="demo" src="demos/ipad/demo8.png" alt="iPad Demo 8" />
-  <img class="demo" src="demos/ipad/demo9.png" alt="iPad Demo 9" />
-  <img class="demo" src="demos/ipad/demo10.png" alt="iPad Demo 10" />
-  </div>
+        <h4>iPad Screenshots</h4>
+        <div class="demo-grid">
+          <img class="demo" src="demos/ipad/demo1.png" alt="iPad Demo 1" />
+          <img class="demo" src="demos/ipad/demo2.png" alt="iPad Demo 2" />
+          <img class="demo" src="demos/ipad/demo3.png" alt="iPad Demo 3" />
+          <img class="demo" src="demos/ipad/demo4.png" alt="iPad Demo 4" />
+          <img class="demo" src="demos/ipad/demo5.png" alt="iPad Demo 5" />
+          <img class="demo" src="demos/ipad/demo6.png" alt="iPad Demo 6" />
+          <img class="demo" src="demos/ipad/demo7.png" alt="iPad Demo 7" />
+          <img class="demo" src="demos/ipad/demo8.png" alt="iPad Demo 8" />
+          <img class="demo" src="demos/ipad/demo9.png" alt="iPad Demo 9" />
+          <img class="demo" src="demos/ipad/demo10.png" alt="iPad Demo 10" />
+        </div>
       </div>
     </section>
 
-  <section class="section-top">
+    <section class="section-top">
+      <h3>TestFlight Access</h3>
+      <a href="https://testflight.apple.com/join/3uU3VUfv" target="_blank" class="demo-button">Join on TestFlight</a>
+      <p class="muted">
+        To test Spy on iOS:
+        <ul>
+          <li>Tap the button above to open TestFlight.</li>
+          <li>Install the TestFlight app from the App Store if prompted.</li>
+          <li>Accept the invite to join the beta program.</li>
+          <li>Download and run Spy directly from TestFlight.</li>
+        </ul>
+      </p>
+    </section>
+
+    <section class="section-top">
       <h3>Open Source</h3>
       <p class="muted">Contribute or report issues on GitHub: <a href="https://github.com/advayc/spy-web" target="_blank" rel="noopener">advayc/spy-web</a></p>
     </section>
 
     <section class="meta-links">
       <div><a href="/privacy.html">Privacy Policy</a><span>•</span><a href="/support.html">Support</a></div>
-  <div class="footer-note">© 2025 Advay Chandorkar. All rights reserved.</div>
     </section>
   </main>
+
   <script>
     const button = document.getElementById('toggle-demos');
     const container = document.getElementById('demo-container');
@@ -116,6 +195,87 @@
         container.style.display = 'none';
         button.textContent = 'Show Demos';
       }
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const zoomInBtn = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
+    const closeBtn = document.getElementById('close-lightbox');
+    let zoomed = false;
+    let dragging = false;
+    let dragStart = {x:0, y:0};
+    let imgPos = {x:0, y:0};
+
+    document.querySelectorAll('.demo').forEach(img => {
+      img.addEventListener('click', function(e) {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = this.src;
+        lightboxImg.alt = this.alt;
+        zoomed = false;
+        imgPos = {x:0, y:0};
+        lightboxImg.classList.remove('lightbox-zoomed');
+        lightboxImg.style.transform = '';
+        lightboxImg.style.cursor = 'zoom-in';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+      lightboxImg.src = '';
+      zoomed = false;
+      imgPos = {x:0, y:0};
+      lightboxImg.classList.remove('lightbox-zoomed');
+      lightboxImg.style.transform = '';
+    }
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+    closeBtn.addEventListener('click', closeLightbox);
+
+    zoomInBtn.addEventListener('click', function(e) {
+      zoomed = true;
+      lightboxImg.classList.add('lightbox-zoomed');
+      lightboxImg.style.cursor = 'grab';
+    });
+    zoomOutBtn.addEventListener('click', function(e) {
+      zoomed = false;
+      lightboxImg.classList.remove('lightbox-zoomed');
+      lightboxImg.style.transform = '';
+      imgPos = {x:0, y:0};
+      lightboxImg.style.cursor = 'zoom-in';
+    });
+    lightboxImg.addEventListener('click', function(e) {
+      if (!zoomed) {
+        zoomed = true;
+        this.classList.add('lightbox-zoomed');
+        this.style.cursor = 'grab';
+      }
+    });
+    lightboxImg.addEventListener('mousedown', function(e) {
+      if (!zoomed) return;
+      dragging = true;
+      dragStart = {x: e.clientX - imgPos.x, y: e.clientY - imgPos.y};
+      this.style.cursor = 'grabbing';
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (dragging && zoomed) {
+        imgPos.x = e.clientX - dragStart.x;
+        imgPos.y = e.clientY - dragStart.y;
+        lightboxImg.style.transform = `scale(2.2) translate(${imgPos.x}px,${imgPos.y}px)`;
+      }
+    });
+    document.addEventListener('mouseup', function(e) {
+      if (dragging) {
+        dragging = false;
+        lightboxImg.style.cursor = 'grab';
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === '+' || e.key === '=') zoomInBtn.click();
+      if (e.key === '-') zoomOutBtn.click();
     });
   </script>
 </body>
