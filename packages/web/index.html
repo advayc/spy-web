@@ -14,12 +14,18 @@
     .muted{color:#a3a3ad}
     .demo{width: calc(33.333% - 10px); height: auto; border-radius:8px;border:1px solid #1e1e2a; transition: opacity 0.3s;}
     .demo:hover { opacity: 0.8; }
-    .site-title{display:flex;align-items:center;gap:12px}
+  .site-title{display:flex;align-items:center;gap:12px}
+  h2 { margin-top: 32px; }
+  .section-top { margin-top: 28px; }
+  .footer-note { margin-top: 8px; }
     .site-title img{width:28px;height:28px}
     .meta-links{margin-top:36px;color:#a3a3ad;font-size:14px}
     .meta-links span{margin:0 8px}
     .demo-button{padding:8px 16px;background:#141414;border:1px solid #262633;border-radius:8px;color:#f7f7fb;cursor:pointer;margin-bottom:20px}
-    .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
+  .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
+  .visible-demo { display: block; }
+  .demo-video-wrap { margin-bottom: 16px; }
+  .demo-video { width: 100%; max-height: 520px; object-fit: contain; border-radius:8px; border:1px solid #1e1e2a; }
     section { margin-bottom: 40px; }
   </style>
 </head>
@@ -29,7 +35,7 @@
       <img src="icon.png" alt="Spy icon" />
       Spy — Party Game
     </h1>
-    <h2 style="margin-top:32px;">About the Game</h2>
+  <h2>About the Game</h2>
     <p>
       Spy is a social deduction party game for iOS, Android, and web. Gather your friends and play two unique modes:
       <ul>
@@ -47,19 +53,31 @@
 
     <section class="demo-section">
       <h3 class="muted">Demos</h3>
-      <button id="toggle-demos" class="demo-button">Show Demos</button>
-      <div id="demo-container" style="display: none;">
+      <button id="toggle-demos" class="demo-button">Hide Demos</button>
+      <div id="demo-container" class="visible-demo">
+      <section class="demo-video-section">
+      <h4>Demo Video</h4>
+      <!-- Demo video (sourced from project assets) -->
+        <div class="demo-video-wrap">
+        <video class="demo demo-video" controls muted loop preload="metadata">
+      <source src="demos/demo.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      </section>
+
   <h4>iPhone Screenshots</h4>
+
   <div class="demo-grid">
-        <img class="demo" src="demos/demo1.png" alt="Demo 1" />
-        <img class="demo" src="demos/demo2.png" alt="Demo 2" />
-        <img class="demo" src="demos/demo3.png" alt="Demo 3" />
-        <img class="demo" src="demos/demo4.png" alt="Demo 4" />
-        <img class="demo" src="demos/demo5.png" alt="Demo 5" />
-        <img class="demo" src="demos/demo6.png" alt="Demo 6" />
-        <img class="demo" src="demos/demo7.png" alt="Demo 7" />
-        <img class="demo" src="demos/demo8.png" alt="Demo 8" />
-        <img class="demo" src="demos/demo9.png" alt="Demo 9" />
+        <img class="demo" src="demos/iphone/demo1.png" alt="Demo 1" />
+        <img class="demo" src="demos/iphone/demo2.png" alt="Demo 2" />
+        <img class="demo" src="demos/iphone/demo3.png" alt="Demo 3" />
+        <img class="demo" src="demos/iphone/demo4.png" alt="Demo 4" />
+        <img class="demo" src="demos/iphone/demo5.png" alt="Demo 5" />
+        <img class="demo" src="demos/iphone/demo6.png" alt="Demo 6" />
+        <img class="demo" src="demos/iphone/demo7.png" alt="Demo 7" />
+        <img class="demo" src="demos/iphone/demo8.png" alt="Demo 8" />
+        <img class="demo" src="demos/iphone/demo9.png" alt="Demo 9" />
   </div>
   <h4>iPad Screenshots</h4>
   <div class="demo-grid">
@@ -77,14 +95,14 @@
       </div>
     </section>
 
-    <section style="margin-top:28px;">
+  <section class="section-top">
       <h3>Open Source</h3>
       <p class="muted">Contribute or report issues on GitHub: <a href="https://github.com/advayc/spy-web" target="_blank" rel="noopener">advayc/spy-web</a></p>
     </section>
 
     <section class="meta-links">
       <div><a href="/privacy.html">Privacy Policy</a><span>•</span><a href="/support.html">Support</a></div>
-      <div style="margin-top:8px">© 2025 Advay Chandorkar. All rights reserved.</div>
+  <div class="footer-note">© 2025 Advay Chandorkar. All rights reserved.</div>
     </section>
   </main>
   <script>
